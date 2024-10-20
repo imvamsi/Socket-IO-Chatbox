@@ -19,20 +19,25 @@ const io = socketio(server, {
 io.on("connection", function (socket) {
   console.log(' we have comms"');
 
-  socket.on("join", function ({ name, room }) {});
+  socket.on("join", function ({ name, room }) {
+    console.log("🚀 ~ room:", room);
+    console.log("🚀 ~ name:", name);
+  });
   socket.on("disconnect", function () {
     console.log("user left");
   });
 });
 
 app.use(router);
-app.use(
-  cors({
-    origin: "http://localhost:5173", // Allow requests from your Vite app
-    methods: ["GET", "POST"],
-    credentials: true, // Allow credentials
-  })
-);
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173", // Allow requests from your Vite app
+//     methods: ["GET", "POST"],
+//     credentials: true, // Allow credentials
+//   })
+// );
+
+app.use(cors());
 
 server.listen(process.env.PORT || 4000, function () {
   console.log(`server running`);

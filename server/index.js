@@ -44,20 +44,35 @@ io.on("connection", (socket) => {
       .to(user.room)
       .emit("message", { user: "admin", text: `${user.name} has joined` });
 
+    io.to(user.room).emit("roomData", {
+      room: user.room,
+      users: getUsersInRoom(user.room),
+    });
     callback();
   });
 
   socket.on("sendMessage", (message, callback) => {
     console.log("🚀 ~ message:", message);
     const user = getUser(socket.id);
-
+    if (!user) return callback("user not found");
     io.to(user.room).emit("message", { user: user.name, text: message });
 
     callback();
   });
 
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    const user = removeUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit("message", {
+        user: "Admin",
+        text: `${user.name} has left.`,
+      });
+      io.to(user.room).emit("roomData", {
+        room: user.room,
+        users: getUsersInRoom(user.room),
+      });
+    }
   });
 });
 

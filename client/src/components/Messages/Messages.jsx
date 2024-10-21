@@ -5,13 +5,16 @@ import "./Messages.css";
 
 function Messages({ messages, name }) {
   return (
-    <ScrollToBottom className="messages">
+    // <ScrollToBottom className="messages">
+    <>
       {messages.map((message, i) => {
         <div key={i}>
           <SingleMessage message={message} name={name} />
         </div>;
       })}
-    </ScrollToBottom>
+    </>
+
+    // </ScrollToBottom>
   );
 }
 

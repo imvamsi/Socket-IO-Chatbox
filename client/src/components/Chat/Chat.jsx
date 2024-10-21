@@ -58,12 +58,12 @@ function Chat() {
     <div className="outer-container">
       <div className="container">
         <Infobar room={room} />
+        <Messages messages={messages} name={name} />
         <Input
           message={message}
           setmessage={setmessage}
           sendMessage={sendMessage}
         />
-        <Messages messages={messages} name={name} />
       </div>
     </div>
   );

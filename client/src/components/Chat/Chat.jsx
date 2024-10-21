@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { io } from "socket.io-client";
 import "./Chat.css";
+import Infobar from "../Infobar/Infobar";
 
 let socket;
 
@@ -54,6 +55,7 @@ function Chat() {
   return (
     <div className="outer-container">
       <div className="container">
+        <Infobar room={room} />
         <input
           type="text"
           value={message}

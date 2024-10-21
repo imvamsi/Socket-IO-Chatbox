@@ -13,26 +13,32 @@ function Chat() {
   const [messages, setmessages] = useState([]);
   const location = useLocation();
   const ENDPOINT = "http://localhost:4000";
-  socket = io(ENDPOINT);
 
   useEffect(() => {
+    socket = io(ENDPOINT);
     const { name, room } = queryString.parse(location.search);
     setname(name);
     setroom(room);
     socket.emit("join", { name, room }, (error) => {
-      if (error) alert(error);
+      if (error) {
+        alert(error);
+      }
     });
 
-    // return () => {
-    //   socket.emit("disconnect");
-    //   socket.off();
-    // };
+    return () => {
+      socket.disconnect();
+      socket.off();
+    };
   }, [ENDPOINT, location.search]);
 
   useEffect(() => {
     socket.on("message", (message) => {
       setmessages((messages) => [...messages, message]);
     });
+
+    return () => {
+      socket.off("message");
+    };
   }, []);
 
   function sendMessage(e) {
@@ -55,7 +61,7 @@ function Chat() {
       type="text"
       value={message}
       onChange={(e) => setmessage(e.target.value)}
-      onKeyUp={(e) => sendMessage(e)}
+      onKeyDown={(event) => (event.key === "Enter" ? sendMessage(event) : null)}
     />
   );
 }

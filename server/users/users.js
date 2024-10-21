@@ -1,12 +1,13 @@
 const users = [];
+console.log("🚀 ~ users:", users);
 
 function addUser({ id, name, room }) {
   name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
 
-  const existingUser = users.find(
-    (user) => user.name === name && user.room === room
-  );
+  const existingUser = users.find((user) => {
+    return user.name === name && user.room === room;
+  });
   if (!name || !room) return { error: "Username and room are required." };
   if (existingUser) return { error: "username is taken already" };
 

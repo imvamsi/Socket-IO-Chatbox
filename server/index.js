@@ -38,6 +38,12 @@ io.on("connection", function (socket) {
     callback();
   });
 
+  socket.on("sendMessage", function (message, callback) {
+    const user = getUser(socket.id);
+    io.to(user.room).emit("message", { user: user.name, text: message });
+    callback();
+  });
+
   socket.on("disconnect", function () {
     console.log("user left");
   });

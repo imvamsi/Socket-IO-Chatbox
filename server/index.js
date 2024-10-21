@@ -19,9 +19,13 @@ const io = socketio(server, {
 io.on("connection", function (socket) {
   console.log(' we have comms"');
 
-  socket.on("join", function ({ name, room }) {
+  socket.on("join", function ({ name, room }, callback) {
     console.log("🚀 ~ room:", room);
     console.log("🚀 ~ name:", name);
+    const error = true;
+    // if (error) {
+    //   callback({ error: "error occured" });
+    // }
   });
   socket.on("disconnect", function () {
     console.log("user left");

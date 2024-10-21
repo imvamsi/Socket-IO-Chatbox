@@ -15,11 +15,16 @@ function Chat() {
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
-
     setname(name);
     setroom(room);
+    socket.emit("join", { name, room }, ({ error }) => {
+      alert(error);
+    });
 
-    socket.emit("join", { name, room });
+    return () => {
+      socket.emit("disconnect");
+      socket.off();
+    };
   }, [ENDPOINT, location.search]);
 
   return <h1>Chat</h1>;

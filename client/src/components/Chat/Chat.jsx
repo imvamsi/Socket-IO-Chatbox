@@ -52,8 +52,6 @@ function Chat() {
       });
   }
 
-  console.log("m", message);
-  console.log("ms", messages);
   return (
     <div className="outer-container">
       <div className="container">

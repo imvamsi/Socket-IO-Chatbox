@@ -27,14 +27,17 @@ io.on("connection", function (socket) {
   socket.on("join", function ({ name, room }, callback) {
     const { error, user } = addUser({ id: socket.id, name, room });
     if (error) callback(error);
+    socket.join(user.room);
+
     socket.emit("message", {
       user: "admin",
       text: `Hi ${user.name}!!! welcome to the ${user.room} chatroom`,
     });
+
     socket.broadcast
       .to(user.room)
       .emit("message", { user: "admin", text: `${user.name} has joined` });
-    socket.join(user.room);
+
     callback();
   });
 

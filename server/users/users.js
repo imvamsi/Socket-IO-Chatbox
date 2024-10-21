@@ -7,8 +7,8 @@ function addUser({ id, name, room }) {
   const existingUser = users.find(function (user) {
     if (user.name === name && user.room === room) return user;
   });
-
-  if (existingUser) alert("username is taken already");
+  if (!name || !room) return { error: "Username and room are required." };
+  if (existingUser) return { error: "username is taken already" };
 
   const user = { id, name, room };
   users.push(user);

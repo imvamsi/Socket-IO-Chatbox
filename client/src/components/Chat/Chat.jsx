@@ -19,23 +19,45 @@ function Chat() {
     const { name, room } = queryString.parse(location.search);
     setname(name);
     setroom(room);
-    socket.emit("join", { name, room }, ({ error }) => {
-      alert(error);
+    socket.emit("join", { name, room }, (error) => {
+      if (error) alert(error);
     });
 
-    return () => {
-      socket.emit("disconnect");
-      socket.off();
-    };
+    // return () => {
+    //   socket.emit("disconnect");
+    //   socket.off();
+    // };
   }, [ENDPOINT, location.search]);
 
   useEffect(() => {
     socket.on("message", (message) => {
-      setmessages([...messages, message]);
+      setmessages((messages) => [...messages, message]);
     });
-  }, [messages]);
+  }, []);
 
-  return <h1>Chat</h1>;
+  function sendMessage(e) {
+    e.preventDefault();
+    if (message)
+      socket.emit("sendMessage", message, () => {
+        setmessage("");
+      });
+  }
+
+  console.log("m", message);
+  console.log("ms", messages);
+  return (
+    // <div className="outer-container">
+    //   <div className="container">
+
+    //   </div>
+    // </div>
+    <input
+      type="text"
+      value={message}
+      onChange={(e) => setmessage(e.target.value)}
+      onKeyUp={(e) => sendMessage(e)}
+    />
+  );
 }
 
 export default Chat;

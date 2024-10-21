@@ -26,24 +26,33 @@ io.on("connection", function (socket) {
 
   socket.on("join", function ({ name, room }, callback) {
     const { error, user } = addUser({ id: socket.id, name, room });
-    if (error) callback(error);
+    console.log("🚀 ~ error:", error);
+    console.log("🚀 ~ user:", user);
+    if (error) return callback(error);
+    if (!user) {
+      return callback("User could not be created.");
+    }
     socket.join(user.room);
 
-    socket.emit("message", {
-      user: "admin",
-      text: `Hi ${user.name}!!! welcome to the ${user.room} chatroom`,
-    });
+    if (user && room) {
+      socket.emit("message", {
+        user: "admin",
+        text: `Hi ${user.name}!!! welcome to the ${user.room} chatroom`,
+      });
 
-    socket.broadcast
-      .to(user.room)
-      .emit("message", { user: "admin", text: `${user.name} has joined` });
+      socket.broadcast
+        .to(user.room)
+        .emit("message", { user: "admin", text: `${user.name} has joined` });
+    }
 
     callback();
   });
 
   socket.on("sendMessage", function (message, callback) {
     const user = getUser(socket.id);
-    io.to(user.room).emit("message", { user: user.name, text: message });
+    if (user) {
+      io.to(user.room).emit("message", { user: user.name, text: message });
+    }
     callback();
   });
 

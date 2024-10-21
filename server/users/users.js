@@ -4,9 +4,9 @@ function addUser({ id, name, room }) {
   name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
 
-  const existingUser = users.find(function (user) {
-    if (user.name === name && user.room === room) return user;
-  });
+  const existingUser = users.find(
+    (user) => user.name === name && user.room === room
+  );
   if (!name || !room) return { error: "Username and room are required." };
   if (existingUser) return { error: "username is taken already" };
 

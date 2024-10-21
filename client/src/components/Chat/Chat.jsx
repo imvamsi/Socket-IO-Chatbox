@@ -52,17 +52,18 @@ function Chat() {
   console.log("m", message);
   console.log("ms", messages);
   return (
-    // <div className="outer-container">
-    //   <div className="container">
-
-    //   </div>
-    // </div>
-    <input
-      type="text"
-      value={message}
-      onChange={(e) => setmessage(e.target.value)}
-      onKeyDown={(event) => (event.key === "Enter" ? sendMessage(event) : null)}
-    />
+    <div className="outer-container">
+      <div className="container">
+        <input
+          type="text"
+          value={message}
+          onChange={(e) => setmessage(e.target.value)}
+          onKeyDown={(event) =>
+            event.key === "Enter" ? sendMessage(event) : null
+          }
+        />
+      </div>
+    </div>
   );
 }
 

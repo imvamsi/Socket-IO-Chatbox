@@ -2,8 +2,14 @@ const express = require("express");
 const socketio = require("socket.io");
 const http = require("http");
 const cors = require("cors");
-
+const {
+  addUser,
+  getUser,
+  removeUser,
+  getUsersInRoom,
+} = require("./users/users");
 const router = require("./router");
+const { format } = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -20,12 +26,17 @@ io.on("connection", function (socket) {
   console.log(' we have comms"');
 
   socket.on("join", function ({ name, room }, callback) {
-    console.log("🚀 ~ room:", room);
-    console.log("🚀 ~ name:", name);
-    const error = true;
-    // if (error) {
-    //   callback({ error: "error occured" });
-    // }
+    const { error, user } = addUser({ id: socket.id, name, room });
+    if (error) callback(error);
+    socket.emit("message", {
+      user: admin,
+      text: `Hi ${user.name}!!! welcome to the ${user.room} chatroom`,
+    });
+    socket.broadcast
+      .to(user.room)
+      .emit("message", { user: "admin", text: `${user.name} has joined` });
+    socket.join(user.room);
+    callback();
   });
   socket.on("disconnect", function () {
     console.log("user left");

@@ -9,7 +9,6 @@ const {
   getUsersInRoom,
 } = require("./users/users");
 const router = require("./router");
-const { format } = require("path");
 
 const app = express();
 const server = http.createServer(app);
@@ -29,7 +28,7 @@ io.on("connection", function (socket) {
     const { error, user } = addUser({ id: socket.id, name, room });
     if (error) callback(error);
     socket.emit("message", {
-      user: admin,
+      user: "admin",
       text: `Hi ${user.name}!!! welcome to the ${user.room} chatroom`,
     });
     socket.broadcast
@@ -38,6 +37,7 @@ io.on("connection", function (socket) {
     socket.join(user.room);
     callback();
   });
+
   socket.on("disconnect", function () {
     console.log("user left");
   });

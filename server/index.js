@@ -25,7 +25,6 @@ io.on("connection", (socket) => {
   socket.on("join", ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
 
-    //if (error) return callback(error);
     if (error) {
       return callback(error);
     }
@@ -52,7 +51,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendMessage", (message, callback) => {
-    console.log("🚀 ~ message:", message);
     const user = getUser(socket.id);
     if (!user) return callback("user not found");
     io.to(user.room).emit("message", { user: user.name, text: message });

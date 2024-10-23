@@ -4,7 +4,6 @@ import SingleMessage from "../Messages/SingleMessage/SingleMessage";
 import "./Messages.css";
 
 function Messages({ messages, name }) {
-  console.log("🚀 ~ Messages ~ messages:", messages);
   return (
     <ScrollToBottom className="messages">
       <>

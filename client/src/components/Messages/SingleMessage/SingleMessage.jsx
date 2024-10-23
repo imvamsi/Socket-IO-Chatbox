@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // import ReactEmoji from "react-emoji";
 // import "./SingleMessage.css";
 

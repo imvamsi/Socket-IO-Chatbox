@@ -24,6 +24,8 @@ const io = socketio(server, {
 io.on("connection", (socket) => {
   socket.on("join", ({ name, room }, callback) => {
     const { error, user } = addUser({ id: socket.id, name, room });
+    const userData = getUsersInRoom(user.room);
+    console.log("🚀 ~ socket.on ~ userDATA:", userData?.room);
 
     if (error) {
       return callback(error);
@@ -31,23 +33,24 @@ io.on("connection", (socket) => {
 
     if (!user) {
       return callback("An unknown error occurred.");
+    } else {
+      socket.join(user.room);
+
+      socket.emit("message", {
+        user: "admin",
+        text: `Hi ${user.name}!!! welcome to the ${user.room} chatroom`,
+      });
+
+      socket.broadcast
+        .to(user.room)
+        .emit("message", { user: "admin", text: `${user.name} has joined` });
+
+      io.to(user.room).emit("roomData", {
+        room: user.room,
+        users: getUsersInRoom(user.room),
+      });
+      callback();
     }
-    socket.join(user.room);
-
-    socket.emit("message", {
-      user: "admin",
-      text: `Hi ${user.name}!!! welcome to the ${user.room} chatroom`,
-    });
-
-    socket.broadcast
-      .to(user.room)
-      .emit("message", { user: "admin", text: `${user.name} has joined` });
-
-    io.to(user.room).emit("roomData", {
-      room: user.room,
-      users: getUsersInRoom(user.room),
-    });
-    callback();
   });
 
   socket.on("sendMessage", (message, callback) => {

@@ -20,7 +20,6 @@ function Chat() {
   const location = useLocation();
   const ENDPOINT = "http://localhost:4000";
 
-  console.log("🚀 ~ Chat ~ users:", users);
   useEffect(() => {
     socket = io(ENDPOINT);
     const { name, room } = queryString.parse(location.search);
